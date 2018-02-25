@@ -16,8 +16,15 @@ RUN adduser -S -u 10000 -h $HOME -G runner runner
 COPY tools /home/runner/tools
 RUN chmod +x /home/runner/tools/run.sh
 
+# We need to support Openshift's random userid's
+# Openshift leaves the group as root. Exploit this to ensure we can always write to them
+# Ensure we are in the the passwd file
+RUN chmod g+w /etc/passwd
+RUN chgrp -Rf root /home/runner && chmod -Rf g+w /home/runner
+ENV RUNNER_USER runner
+
 EXPOSE 9000
 
 USER runner
 
-CMD ["/home/runner/tools/run.sh"]
+ENTRYPOINT ["/home/runner/tools/run.sh"]

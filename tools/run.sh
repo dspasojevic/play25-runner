@@ -1,5 +1,11 @@
 #!/bin/bash -x
 
+# Prepares the artifacts.
+source /home/runner/tools/prepare.sh $1
+
+# Make sure the first argument will not be passed down to exec.
+shift
+
 # Ensure that assigned uid has entry in /etc/passwd.
 if [ `id -u` -ge 10000 ]; then
     echo "Patching /etc/passwd to make ${RUNNER_USER} -> builder and `id -u` -> ${RUNNER_USER}"

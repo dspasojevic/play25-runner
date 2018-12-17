@@ -3,8 +3,10 @@
 # Prepares the artifacts.
 source /home/runner/tools/prepare.sh $1
 
-# Make sure the first argument will not be passed down to exec.
-shift
+# Make sure the first argument will not be passed down to exec if it is a artifact location.
+if [[ $location == *s3://* ]]; then
+  shift
+fi
 
 # Ensure that assigned uid has entry in /etc/passwd.
 if [ `id -u` -ge 10000 ]; then
